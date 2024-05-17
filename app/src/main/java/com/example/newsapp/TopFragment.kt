@@ -3,12 +3,15 @@ package com.example.newsapp
 import android.app.Activity
 import android.app.Fragment
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import com.example.newsapp.adapter.TopListAdapter
 import com.example.newsapp.manager.GetNewsManager
+import com.example.newsapp.util.ProgressDialogUtil
 import kotlin.concurrent.thread
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,14 +40,26 @@ class TopFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_top, container, false)
 
-        // ニュースリストをとってきて表示する
         val manager = GetNewsManager()
-        thread {
-            manager.getNews()
+        ProgressDialogUtil.show(mActivity)
+        // ニュースリストをとってきて表示する
+        val listener = object : GetNewsManager.ICallback {
+            override fun getFinished() {
+                val handler = Handler(Looper.getMainLooper())
+                handler.post {
+                    // メインスレッドで実行する処理
+                    ProgressDialogUtil.hide()
+                    val adapter = TopListAdapter(mActivity, manager.getArticles())
+                    val listView: ListView = view.findViewById(R.id.top_list_view)
+                    listView.adapter = adapter
+                }
+            }
+
         }
-        val adapter = TopListAdapter(mActivity, R.layout.news_list_item, manager.getArticles())
-        val listView: ListView = view.findViewById(R.id.top_list_view)
-        listView.adapter = adapter
+        thread {
+            manager.getNews(listener)
+        }
+
 
         // Inflate the layout for this fragment
         return view

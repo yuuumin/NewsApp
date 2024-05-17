@@ -3,4 +3,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="top_title">今日のトップニュース</string>
+    <string name="loading">読み込み中...</string>
 </resources>
