@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.newsapp.controller.ApiController
 import com.example.newsapp.data.Article
 import org.json.JSONObject
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class GetNewsManager {
 
@@ -45,6 +47,9 @@ class GetNewsManager {
             val url = articleObj.getString("url")
             val utlToImage = articleObj.getString("urlToImage")
             val publishedAt = articleObj.getString("publishedAt")
+//            val localPublishedAt = LocalDateTime.parse(publishedAt)
+//            val formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH時mm分")
+//            val formattedPublishedAt = localPublishedAt.format(formatter)
             val article = Article(title, description, url, utlToImage, publishedAt)
             mArticles.add(article)
         }

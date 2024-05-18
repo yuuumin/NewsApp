@@ -15,7 +15,7 @@ object ProgressDialogUtil {
 
             mpProgressDialog = AlertDialog.Builder(context)
                 .setView(dialogView)
-                .setCancelable(false) // バックキーでキャンセルできないようにする場合
+                .setCancelable(false)
                 .create()
 
             mpProgressDialog?.show()

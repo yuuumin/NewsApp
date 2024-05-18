@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.newsapp.R
 import com.example.newsapp.data.Article
+import com.squareup.picasso.Picasso
 
 class TopListAdapter(context: Context, private val dataList: List<Article>)
     : BaseAdapter() {
@@ -37,6 +38,16 @@ class TopListAdapter(context: Context, private val dataList: List<Article>)
 
         titleText.text = dataList[position].title
         publishedAtText.text = dataList[position].publishedAt
+        if (dataList[position].urlToImage.isNullOrBlank()) {
+            // 画像がない場合は表示しない
+            // TODO: 現在レイアウトの関係で領域がなくならない
+            image.visibility = View.GONE
+        } else {
+            image.visibility = View.VISIBLE
+            Picasso.get()
+                .load(dataList[position].urlToImage)
+                .into(image)
+        }
 
         return view
     }

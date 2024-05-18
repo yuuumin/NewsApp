@@ -47,7 +47,10 @@ class ApiController {
                     sb.append(line)
                 }
             } else {
-                // If responseCode is not HTTP_OK
+                // TODO: OKじゃない時のことを考える
+                // TODO: 結果をどこまで戻してどこで判定するか？
+                // 403
+                // 500
             }
         } catch (e: IOException) {
             throw e

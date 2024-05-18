@@ -45,8 +45,7 @@ class TopFragment : Fragment() {
         // ニュースリストをとってきて表示する
         val listener = object : GetNewsManager.ICallback {
             override fun getFinished() {
-                val handler = Handler(Looper.getMainLooper())
-                handler.post {
+                mActivity.runOnUiThread {
                     // メインスレッドで実行する処理
                     ProgressDialogUtil.hide()
                     val adapter = TopListAdapter(mActivity, manager.getArticles())
