@@ -10,7 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.newsapp.R
 import com.example.newsapp.data.Article
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 
 class TopListAdapter(context: Context, private val dataList: List<Article>)
     : BaseAdapter() {
@@ -40,13 +42,21 @@ class TopListAdapter(context: Context, private val dataList: List<Article>)
         publishedAtText.text = dataList[position].publishedAt
         if (dataList[position].urlToImage.isNullOrBlank()) {
             // 画像がない場合は表示しない
-            // TODO: 現在レイアウトの関係で領域がなくならない
             image.visibility = View.GONE
         } else {
-            image.visibility = View.VISIBLE
             Picasso.get()
                 .load(dataList[position].urlToImage)
-                .into(image)
+                .into(image, object : Callback {
+                    override fun onSuccess() {
+                        image.visibility = View.VISIBLE
+                    }
+
+                    override fun onError(e: Exception?) {
+                        // 画像がロードできない場合は表示しない
+                        image.visibility = View.GONE
+                    }
+
+                })
         }
 
         return view

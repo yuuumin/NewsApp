@@ -5,6 +5,8 @@ import com.example.newsapp.controller.ApiController
 import com.example.newsapp.data.Article
 import org.json.JSONObject
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class GetNewsManager {
@@ -46,11 +48,16 @@ class GetNewsManager {
             val description = articleObj.getString("description")
             val url = articleObj.getString("url")
             val utlToImage = articleObj.getString("urlToImage")
+
             val publishedAt = articleObj.getString("publishedAt")
-//            val localPublishedAt = LocalDateTime.parse(publishedAt)
-//            val formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH時mm分")
-//            val formattedPublishedAt = localPublishedAt.format(formatter)
-            val article = Article(title, description, url, utlToImage, publishedAt)
+            // ZonedDateTimeにパース
+            val zonedPublishedAt = ZonedDateTime.parse(publishedAt)
+            // 日本標準時（JST）に変換
+            val jstPublishedAt = zonedPublishedAt.withZoneSameInstant(ZoneId.of("Asia/Tokyo"))
+            // 年月日時分に変換
+            val formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH時mm分")
+            val formattedPublishedAt = jstPublishedAt.format(formatter)
+            val article = Article(title, description, url, utlToImage, formattedPublishedAt)
             mArticles.add(article)
         }
         Log.d("aki", mArticles.toString())
